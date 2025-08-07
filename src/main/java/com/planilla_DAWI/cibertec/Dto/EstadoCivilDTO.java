@@ -1,12 +1,16 @@
 package com.planilla_DAWI.cibertec.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class EstadoCivilDTO {
     private Integer idEstadoCivil;
     private String nombre;
     private Boolean activo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date fecCreacion;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date fecUltimaModificacion;
 
     // Getters y Setters

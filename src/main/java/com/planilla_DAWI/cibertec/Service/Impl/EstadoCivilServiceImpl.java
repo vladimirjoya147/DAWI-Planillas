@@ -8,63 +8,91 @@ import com.planilla_DAWI.cibertec.Utils.Enums.EstadoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class EstadoCivilServiceImpl implements EstadoCivilService {
-
-    private final EstadoCivilRepository estadoCivilRepository;
-    private final ModelMapper modelMapper;
     private static final int PAGE_SIZE = 10;
+    private final EstadoCivilRepository repository;
 
     @Autowired
-    public EstadoCivilServiceImpl(EstadoCivilRepository estadoCivilRepository, ModelMapper modelMapper) {
-        this.estadoCivilRepository = estadoCivilRepository;
-        this.modelMapper = modelMapper;
+    public EstadoCivilServiceImpl(EstadoCivilRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Page<EstadoCivilDTO> listarEstadosCiviles(int page, EstadoEnum estado) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
-        Page<EstadoCivil> estadosCivilesPage = estadoCivilRepository.findByEstado(estado.getValor(), pageable);
 
-        return estadosCivilesPage.map(estadoCivil -> modelMapper.map(estadoCivil, EstadoCivilDTO.class));
+
+
+        return repository.findByEstado(estado.getValor(), PageRequest.of(page - 1, PAGE_SIZE))
+                .map(this::convertToDto);
     }
 
     @Override
     public EstadoCivilDTO obtenerPorId(Integer id) {
-        Optional<EstadoCivil> estadoCivil = estadoCivilRepository.findById(id);
-        return estadoCivil.map(ec -> modelMapper.map(ec, EstadoCivilDTO.class)).orElse(null);
+        return repository.findById(id)
+                .map(this::convertToDto)
+                .orElse(null);
     }
 
-    @Override
     @Transactional
-    public EstadoCivilDTO crear(EstadoCivilDTO estadoCivilDTO) {
-        EstadoCivil estadoCivil = modelMapper.map(estadoCivilDTO, EstadoCivil.class);
-        estadoCivil.setActivo(true);
-        estadoCivil.setFecCreacion(new Date());
-        estadoCivil = estadoCivilRepository.save(estadoCivil);
-        return modelMapper.map(estadoCivil, EstadoCivilDTO.class);
+    @Override
+    public EstadoCivilDTO crear(EstadoCivilDTO dto) {
+        EstadoCivil entity = convertToEntity(dto);
+        entity.setActivo(true);
+        entity.setFecCreacion(LocalDateTime.now());
+        return convertToDto(repository.save(entity));
     }
 
-    @Override
     @Transactional
-    public EstadoCivilDTO actualizar(EstadoCivilDTO estadoCivilDTO) {
-        EstadoCivil estadoCivil = modelMapper.map(estadoCivilDTO, EstadoCivil.class);
-        estadoCivil.setFecUltimaModificacion(new Date());
-        estadoCivil = estadoCivilRepository.save(estadoCivil);
-        return modelMapper.map(estadoCivil, EstadoCivilDTO.class);
+    @Override
+    public EstadoCivilDTO actualizar(EstadoCivilDTO dto) {
+        EstadoCivil entity = convertToEntity(dto);
+        entity.setFecUltimaModificacion(LocalDateTime.now());
+        return convertToDto(repository.save(entity));
     }
 
-    @Override
     @Transactional
+    @Override
     public void cambiarEstado(Integer id) {
-        estadoCivilRepository.cambiarEstado(id, new Date());
+        repository.cambiarEstado(id,new Date());
+    }
+
+    private EstadoCivilDTO convertToDto(EstadoCivil entity) {
+        EstadoCivilDTO dto = new EstadoCivilDTO();
+        dto.setIdEstadoCivil(entity.getIdEstadoCivil());
+        dto.setNombre(entity.getNombre());
+        dto.setActivo(entity.getActivo());
+        dto.setFecCreacion(convertToDate( entity.getFecCreacion()));
+        dto.setFecUltimaModificacion(convertToDate( entity.getFecUltimaModificacion()));
+        return dto;
+    }
+
+    private EstadoCivil convertToEntity(EstadoCivilDTO dto) {
+        EstadoCivil entity = new EstadoCivil();
+        entity.setIdEstadoCivil(dto.getIdEstadoCivil());
+        entity.setNombre(dto.getNombre());
+        entity.setActivo(dto.getActivo());
+        entity.setFecCreacion( convertToLocalDateTime(dto.getFecCreacion()));
+        entity.setFecUltimaModificacion(convertToLocalDateTime(dto.getFecUltimaModificacion()));
+        return entity;
+    }
+    // Métodos de ayuda para la conversión
+    private Date convertToDate(LocalDateTime localDateTime) {
+        return localDateTime != null ?
+                Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()) :
+                null;
+    }
+
+    private LocalDateTime convertToLocalDateTime(Date date) {
+        return date != null ?
+                LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()) :
+                null;
     }
 }

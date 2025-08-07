@@ -1,5 +1,8 @@
 package com.planilla_DAWI.cibertec.Utils.Enums;
 
+import lombok.Getter;
+
+@Getter
 public enum EstadoEnum {
     INACTIVO(0),
     ACTIVO(1),
@@ -9,10 +12,6 @@ public enum EstadoEnum {
 
     EstadoEnum(int valor) {
         this.valor = valor;
-    }
-
-    public int getValor() {
-        return valor;
     }
 
     public static EstadoEnum fromValor(int valor) {
