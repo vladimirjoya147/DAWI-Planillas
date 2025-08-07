@@ -45,7 +45,7 @@ public class Trabajador {
     private String email;
 
     @Column(nullable = false)
-    private Integer hijos = 0;
+    private int hijos = 0;
 
     @ManyToOne
     @JoinColumn(name = "idCargo", nullable = false)
@@ -69,7 +69,7 @@ public class Trabajador {
     private byte[] foto;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    private boolean activo = true;
 
     @Column(nullable = false)
     private LocalDateTime fecCreacion = LocalDateTime.now();

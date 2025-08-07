@@ -18,7 +18,7 @@ public class Genero {
     private String nombre;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    private boolean activo = true;
 
     @Column(nullable = false)
     private LocalDateTime fecCreacion = LocalDateTime.now();
