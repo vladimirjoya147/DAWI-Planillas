@@ -16,7 +16,7 @@ public enum EstadoEnum {
 
     public static EstadoEnum fromValor(int valor) {
         for (EstadoEnum estado : EstadoEnum.values()) {
-            if (estado.getValor() == valor) {
+            if (estado.valor == valor) {
                 return estado;
             }
         }

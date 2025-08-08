@@ -22,10 +22,24 @@ public class SistemaPension {
     private BigDecimal prima;
 
     @Column(nullable = false)
-    private boolean activo = true;
+    private Boolean activo = true;
 
-    @Column(nullable = false)
-    private LocalDateTime fecCreacion = LocalDateTime.now();
+    @Column(name = "FecCreacion", nullable = false)
+    private LocalDateTime fecCreacion;
 
+    @Column(name = "FecUltimaModificacion")
     private LocalDateTime fecUltimaModificacion;
+
+
+    @PrePersist
+    protected void onCreate() {
+        if (fecCreacion == null) {
+            fecCreacion = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fecUltimaModificacion = LocalDateTime.now();
+    }
 }
