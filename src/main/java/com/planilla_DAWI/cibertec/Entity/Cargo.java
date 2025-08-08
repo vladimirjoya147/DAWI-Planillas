@@ -1,10 +1,16 @@
 package com.planilla_DAWI.cibertec.Entity;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Cargos")
 public class Cargo {
 
@@ -16,11 +22,25 @@ public class Cargo {
     private String nombre;
 
     @Column(nullable = false)
-    private boolean activo = true;
+    private Boolean activo = true;
 
-    @Column(nullable = false)
-    private LocalDateTime fecCreacion = LocalDateTime.now();
+    @Column(name = "FecCreacion", nullable = false)
+    private LocalDateTime fecCreacion;
 
+    @Column(name = "FecUltimaModificacion")
     private LocalDateTime fecUltimaModificacion;
+
+
+    @PrePersist
+    protected void onCreate() {
+        if (fecCreacion == null) {
+            fecCreacion = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fecUltimaModificacion = LocalDateTime.now();
+    }
 }
 
