@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class EstadoCivilDTO {
-    private Integer idEstadoCivil;
+    private Integer id;
     private String nombre;
     private Boolean activo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -13,13 +13,13 @@ public class EstadoCivilDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date fecUltimaModificacion;
 
-    // Getters y Setters
+    // Getters and Setters
     public Integer getIdEstadoCivil() {
-        return idEstadoCivil;
+        return id;
     }
 
     public void setIdEstadoCivil(Integer idEstadoCivil) {
-        this.idEstadoCivil = idEstadoCivil;
+        this.id = idEstadoCivil;
     }
 
     public String getNombre() {

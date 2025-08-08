@@ -3,9 +3,10 @@ package com.planilla_DAWI.cibertec.Service;
 import com.planilla_DAWI.cibertec.Dto.EstadoCivilDTO;
 import com.planilla_DAWI.cibertec.Utils.Enums.EstadoEnum;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EstadoCivilService {
-    Page<EstadoCivilDTO> listarEstadosCiviles(int page, EstadoEnum estado);
+    Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado);
     EstadoCivilDTO obtenerPorId(Integer id);
     EstadoCivilDTO crear(EstadoCivilDTO estadoCivilDTO);
     EstadoCivilDTO actualizar(EstadoCivilDTO estadoCivilDTO);

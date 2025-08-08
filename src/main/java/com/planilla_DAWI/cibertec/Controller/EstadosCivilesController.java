@@ -6,6 +6,9 @@ import com.planilla_DAWI.cibertec.Utils.Enums.EstadoEnum;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,13 +29,18 @@ public class EstadosCivilesController {
         this.estadoCivilService = estadoCivilService;
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> listarEstadosCiviles(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "TODOS") EstadoEnum estado) {
+    @GetMapping("/listar")
+    public ResponseEntity<Map<String, Object>> listarEstadosCiviles(@RequestParam(defaultValue = "TODOS") EstadoEnum estado,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size,
+                                                                    @RequestParam(defaultValue = "Id,asc") String[] sort) {
 
         try {
-            Page<EstadoCivilDTO> estadosCivilesPage = estadoCivilService.listarEstadosCiviles(page, estado);
+            // Crear el objeto Pageable
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sort[1].equals("desc")
+                    ? Sort.Direction.DESC : Sort.Direction.ASC, sort[0]));
+
+            Page<EstadoCivilDTO> estadosCivilesPage = estadoCivilService.listarEstadosCiviles(pageable, estado);
 
             Map<String, Object> response = new HashMap<>();
             response.put("content", estadosCivilesPage.getContent());
@@ -52,7 +60,7 @@ public class EstadosCivilesController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtenerById/{id}")
     public ResponseEntity<Map<String, Object>> obtenerEstadoCivil(@PathVariable Integer id) {
         try {
             EstadoCivilDTO estadoCivilDTO = estadoCivilService.obtenerPorId(id);
@@ -75,7 +83,7 @@ public class EstadosCivilesController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/Insertar")
     public ResponseEntity<Map<String, Object>> crearEstadoCivil(
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
             BindingResult result) {
@@ -102,7 +110,7 @@ public class EstadosCivilesController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/Update/{id}")
     public ResponseEntity<Map<String, Object>> actualizarEstadoCivil(
             @PathVariable Integer id,
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
@@ -141,7 +149,7 @@ public class EstadosCivilesController {
         }
     }
 
-    @PatchMapping("/{id}/estado")
+    @PatchMapping("/cambiarEstado/{id}")
     public ResponseEntity<Map<String, Object>> cambiarEstado(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
 

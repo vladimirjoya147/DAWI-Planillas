@@ -8,6 +8,7 @@ import com.planilla_DAWI.cibertec.Utils.Enums.EstadoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,7 @@ import java.util.Date;
 
 @Service
 public class EstadoCivilServiceImpl implements EstadoCivilService {
-    private static final int PAGE_SIZE = 10;
+
     private final EstadoCivilRepository repository;
 
     @Autowired
@@ -26,11 +27,8 @@ public class EstadoCivilServiceImpl implements EstadoCivilService {
     }
 
     @Override
-    public Page<EstadoCivilDTO> listarEstadosCiviles(int page, EstadoEnum estado) {
-
-
-
-        return repository.findByEstado(estado.getValor(), PageRequest.of(page - 1, PAGE_SIZE))
+    public Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado) {
+        return repository.findByEstado(estado.getValor(),page)
                 .map(this::convertToDto);
     }
 
