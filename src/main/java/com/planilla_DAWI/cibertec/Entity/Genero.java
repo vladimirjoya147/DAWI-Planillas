@@ -20,8 +20,22 @@ public class Genero {
     @Column(nullable = false)
     private Boolean activo = true;
 
-    @Column(nullable = false)
-    private LocalDateTime fecCreacion = LocalDateTime.now();
+    @Column(name = "FecCreacion", nullable = false)
+    private LocalDateTime fecCreacion;
 
+    @Column(name = "FecUltimaModificacion")
     private LocalDateTime fecUltimaModificacion;
+
+
+    @PrePersist
+    protected void onCreate() {
+        if (fecCreacion == null) {
+            fecCreacion = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fecUltimaModificacion = LocalDateTime.now();
+    }
 }

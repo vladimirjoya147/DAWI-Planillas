@@ -34,7 +34,7 @@ public class AsistenciaTrabajador {
     private BigDecimal horasExtra35;
 
     @Column(nullable = false)
-    private Boolean activo = true;
+    private boolean activo =  true;
 
     @Column(nullable = false)
     private LocalDateTime fecCreacion = LocalDateTime.now();
