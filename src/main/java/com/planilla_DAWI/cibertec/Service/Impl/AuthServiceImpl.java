@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.planilla_DAWI.cibertec.Utils.Helps.Convert.isValidEmail;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -51,18 +53,37 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public String registerUser(RegisterRequestDto registerRequest) {
+        // Validar que el username no exista
         if (usuarioRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new RuntimeException("El usuario ya existe");
+            throw new RuntimeException("El nombre de usuario ya está en uso");
+        }
+
+        // Validar que el email no exista
+        if (usuarioRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new RuntimeException("El email ya está registrado");
+        }
+
+        // Validar que el rol no sea nulo
+        if (registerRequest.getRole() == null) {
+            throw new RuntimeException("El rol es obligatorio");
+        }
+
+        // Validar formato de email
+        if (!isValidEmail(registerRequest.getEmail())) {
+            throw new RuntimeException("El formato del email no es válido");
         }
 
         Usuario usuario = new Usuario();
         usuario.setUsername(registerRequest.getUsername());
         usuario.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         usuario.setEmail(registerRequest.getEmail());
+        usuario.setRole(registerRequest.getRole());
         usuario.setEnabled(true);
 
         usuarioRepository.save(usuario);
 
-        return "Usuario registrado exitosamente";
+        return String.format("Usuario %s registrado exitosamente como %s",
+                registerRequest.getUsername(),
+                registerRequest.getRole().getDescription());
     }
 }

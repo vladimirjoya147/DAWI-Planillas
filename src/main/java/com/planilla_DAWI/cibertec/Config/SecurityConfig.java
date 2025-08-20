@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/enums/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -68,6 +69,9 @@ public class SecurityConfig {
                                 "/configuration/ui",
                                 "/configuration/security"
                         ).permitAll()
+                        .requestMatchers("/api/cargos/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        //.requestMatchers("/api/trabajadores/**").hasRole("ADMIN")
+                        .requestMatchers("/api/cargos/Insert").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

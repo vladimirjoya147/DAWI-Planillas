@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -35,34 +36,111 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            String jwt = parseJwt(request);
+            // Debug: imprimir información de la request
+            logger.debug("Request URL: {}", request.getRequestURL());
+            logger.debug("Request Method: {}", request.getMethod());
 
-            if (jwt != null && jwtUtil.validateToken(jwt)) {
+            String jwt = parseJwt(request);
+            logger.debug("JWT encontrado: {}", jwt != null ? "SÍ" : "NO");
+
+            if (jwt == null) {
+                logHeaders(request); // Mostrar todos los headers
+            }
+
+
+            if (jwt != null) {
+                // Extraer username del token
                 String username = jwtUtil.extractUsername(jwt);
 
+                // Cargar UserDetails desde la base de datos
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                // Validar token CON UserDetails (como solicitaste)
+                if (jwtUtil.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    logger.debug("JWT válido para usuario: {}", username);
+                } else {
+                    logger.warn("JWT inválido o expirado para usuario: {}", username);
+                }
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Cannot set user authentication: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
+        // 1. Intentar con el header estándar
         String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+        // 2. Si no funciona, intentar con headers en minúsculas
+        if (headerAuth == null) {
+            headerAuth = request.getHeader("authorization");
+        }
+
+        // 3. Intentar con otros casos comunes
+        if (headerAuth == null) {
+            headerAuth = request.getHeader("AUTHORIZATION");
+        }
+
+        // 4. Buscar en parámetros de query (útil para testing)
+        if (headerAuth == null) {
+            headerAuth = request.getParameter("token");
+        }
+
+        // 5. Buscar en atributos de request (para WebSockets, etc.)
+        if (headerAuth == null) {
+            headerAuth = (String) request.getAttribute("Authorization");
+        }
+
+        // 6. Debug: mostrar todos los headers si es necesario
+        if (headerAuth == null && logger.isDebugEnabled()) {
+            logHeaders(request);
+        }
+
+        // Extraer el token si se encuentra
+        if (StringUtils.hasText(headerAuth)) {
+            // Manejar diferentes formatos
+            if (headerAuth.startsWith("Bearer ")) {
+                return headerAuth.substring(7);
+            } else if (headerAuth.startsWith("bearer ")) {
+                return headerAuth.substring(7);
+            } else if (headerAuth.startsWith("Token ")) {
+                return headerAuth.substring(6);
+            } else if (headerAuth.startsWith("token ")) {
+                return headerAuth.substring(6);
+            } else {
+                // Asumir que es solo el token
+                return headerAuth;
+            }
         }
 
         return null;
     }
-}
+
+    private void logHeaders(HttpServletRequest request) {
+        logger.debug("=== REQUEST HEADERS ===");
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            logger.debug("{}: {}", headerName, headerValue);
+        }
+        logger.debug("=======================");
+
+        logger.debug("=== REQUEST PARAMETERS ===");
+        Enumeration<String> paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String paramName = paramNames.nextElement();
+            String paramValue = request.getParameter(paramName);
+            logger.debug("{}: {}", paramName, paramValue);
+        }
+        logger.debug("=========================");
+    }}
