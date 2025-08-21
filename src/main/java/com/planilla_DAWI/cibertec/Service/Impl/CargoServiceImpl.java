@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CargoServiceImpl implements CargoService {
@@ -23,6 +24,9 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public Page<CargoDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
+
+        List<Cargo> ddd=repository.findByEstado(estado.getValor());
+        Page<Cargo> dd=repository.findByEstado(estado.getValor(),pageable);
         return repository.findByEstado(estado.getValor(), pageable).map(CargoMapper::toDTO);
     }
 
