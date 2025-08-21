@@ -13,37 +13,27 @@ public class Trabajador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTrabajador;
-
     @ManyToOne
     @JoinColumn(name = "idTipoDocumento", nullable = false)
     private TipoDocumento tipoDocumento;
-
     @Column(nullable = false, length = 11)
     private String documento;
-
     @Column(nullable = false, length = 50)
     private String nombres;
-
     @Column(nullable = false, length = 50)
     private String apellidoPaterno;
-
     @Column(nullable = false, length = 50)
     private String apellidoMaterno;
-
     @ManyToOne
     @JoinColumn(name = "idGenero", nullable = false)
     private Genero genero;
-
     @ManyToOne
     @JoinColumn(name = "idEstadoCivil", nullable = false)
     private EstadoCivil estadoCivil;
-
     @Column(nullable = false, length = 120)
     private String direccion;
-
     @Column(length = 120)
     private String email;
-
     @Column(nullable = false)
     private int hijos = 0;
 
@@ -52,10 +42,10 @@ public class Trabajador {
     private Cargo cargo;
 
     @Column(nullable = false)
-    private LocalDate fecNacimiento;
+    private LocalDateTime fecNacimiento;
 
     @Column(nullable = false)
-    private LocalDate fecIngreso;
+    private LocalDateTime fecIngreso;
 
     @ManyToOne
     @JoinColumn(name = "idSituacion", nullable = false)
