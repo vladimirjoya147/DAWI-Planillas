@@ -22,8 +22,8 @@ public class SistemaPensionServiceImpl implements SistemaPensionService {
     private SistemaPensionRepository repository;
 
     @Override
-    public Page<SistemaPensionDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
-        return repository.findByEstado(estado.getValor(), pageable).map(SistemaPensionMapper::toDTO);
+    public Page<SistemaPensionDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable) {
+        return repository.findByEstado(estado.getValor(), texto, pageable).map(SistemaPensionMapper::toDTO);
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SituacionTrabajadorService {
-    Page<SituacionTrabajadorDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable);
+    Page<SituacionTrabajadorDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable);
     SituacionTrabajadorDTO insertar(SituacionTrabajadorDTO dto);
     SituacionTrabajadorDTO actualizar(SituacionTrabajadorDTO dto);
     int cambiarEstado(Integer id);

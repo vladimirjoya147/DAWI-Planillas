@@ -23,11 +23,8 @@ public class CargoServiceImpl implements CargoService {
     private CargoRepository repository;
 
     @Override
-    public Page<CargoDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
-
-        List<Cargo> ddd=repository.findByEstado(estado.getValor());
-        Page<Cargo> dd=repository.findByEstado(estado.getValor(),pageable);
-        return repository.findByEstado(estado.getValor(), pageable).map(CargoMapper::toDTO);
+    public Page<CargoDTO> buscarPorEstado(EstadoEnum estado,String texto ,Pageable pageable) {
+        return repository.findByEstado(estado.getValor(),texto, pageable).map(CargoMapper::toDTO);
     }
 
     @Override
@@ -52,7 +49,7 @@ public class CargoServiceImpl implements CargoService {
     @Override
     @Transactional
     public int cambiarEstado(Integer id) {
-        return repository.cambiarEstado(id, new Date());
+        return repository.cambiarEstado(id, LocalDateTime.now());
     }
 
     @Override

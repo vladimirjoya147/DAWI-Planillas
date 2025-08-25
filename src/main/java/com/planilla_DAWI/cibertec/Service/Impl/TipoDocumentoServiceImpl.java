@@ -22,8 +22,8 @@ public class TipoDocumentoServiceImpl implements TipoDocumentoService {
     private TipoDocumentoRepository repository;
 
     @Override
-    public Page<TipoDocumentoDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
-        return repository.findByEstado(estado.getValor(), pageable).map(TipoDocumentoMapper::toDTO);
+    public Page<TipoDocumentoDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable) {
+        return repository.findByEstado(estado.getValor(), texto, pageable).map(TipoDocumentoMapper::toDTO);
     }
 
     @Override

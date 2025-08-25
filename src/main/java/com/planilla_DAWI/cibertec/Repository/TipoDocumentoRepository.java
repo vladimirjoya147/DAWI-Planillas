@@ -15,8 +15,10 @@ import java.util.Date;
 @Repository
 public interface TipoDocumentoRepository extends JpaRepository<TipoDocumento, Integer> {
 
-    @Query("SELECT t FROM TipoDocumento t WHERE (:estado = 2 OR t.activo = CASE WHEN :estado = 1 THEN true ELSE false END)")
-    Page<TipoDocumento> findByEstado(@Param("estado") int estado, Pageable pageable);
+    @Query("SELECT t FROM TipoDocumento t WHERE " +
+            "(:estado = 2 OR t.activo = CASE WHEN :estado = 1 THEN true ELSE false END) " +
+            "AND (:texto IS NULL OR :texto = '' OR LOWER(t.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
+    Page<TipoDocumento> findByEstado(@Param("estado") int estado, @Param("texto") String texto, Pageable pageable);
 
     @Transactional
     @Modifying

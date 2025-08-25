@@ -15,8 +15,10 @@ import java.util.Date;
 @Repository
 public interface GeneroRepository extends JpaRepository<Genero, Integer> {
 
-    @Query("SELECT g FROM Genero g WHERE (:estado = 2 OR g.activo = CASE WHEN :estado = 1 THEN true ELSE false END)")
-    Page<Genero> findByEstado(@Param("estado") int estado, Pageable pageable);
+    @Query("SELECT g FROM Genero g WHERE " +
+            "(:estado = 2 OR g.activo = CASE WHEN :estado = 1 THEN true ELSE false END) " +
+            "AND (:texto IS NULL OR :texto = '' OR LOWER(g.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
+    Page<Genero> findByEstado(@Param("estado") int estado, @Param("texto") String texto, Pageable pageable);
 
     @Transactional
     @Modifying

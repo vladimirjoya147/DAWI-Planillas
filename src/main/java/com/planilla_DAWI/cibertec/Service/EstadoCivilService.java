@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface EstadoCivilService {
-    Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado);
+    Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado, String texto);
     EstadoCivilDTO obtenerPorId(Integer id);
     EstadoCivilDTO crear(EstadoCivilDTO estadoCivilDTO);
     EstadoCivilDTO actualizar(EstadoCivilDTO estadoCivilDTO);

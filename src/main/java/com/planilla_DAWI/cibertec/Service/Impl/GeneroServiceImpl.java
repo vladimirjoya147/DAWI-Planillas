@@ -22,8 +22,8 @@ public class GeneroServiceImpl implements GeneroService {
     private GeneroRepository repository;
 
     @Override
-    public Page<GeneroDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
-        return repository.findByEstado(estado.getValor(), pageable).map(GeneroMapper::toDTO);
+    public Page<GeneroDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable) {
+        return repository.findByEstado(estado.getValor(), texto, pageable).map(GeneroMapper::toDTO);
     }
 
     @Override

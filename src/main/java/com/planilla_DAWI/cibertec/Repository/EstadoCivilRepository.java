@@ -16,8 +16,9 @@ import java.util.Date;
 public interface EstadoCivilRepository extends JpaRepository<EstadoCivil, Integer> {
 
     @Query("SELECT e FROM EstadoCivil e WHERE " +
-            "(:estado = 2 OR e.activo = CASE WHEN :estado = 1 THEN true ELSE false END)")
-    Page<EstadoCivil> findByEstado(@Param("estado") int estado, Pageable pageable);
+            "(:estado = 2 OR e.activo = CASE WHEN :estado = 1 THEN true ELSE false END) " +
+            "AND (:texto IS NULL OR :texto = '' OR LOWER(e.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
+    Page<EstadoCivil> findByEstado(@Param("estado") int estado, @Param("texto") String texto, Pageable pageable);
 
     @Modifying
     @Transactional

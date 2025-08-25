@@ -15,8 +15,10 @@ import java.util.Date;
 @Repository
 public interface SistemaPensionRepository extends JpaRepository<SistemaPension, Integer> {
 
-    @Query("SELECT s FROM SistemaPension s WHERE (:estado = 2 OR s.activo = CASE WHEN :estado = 1 THEN true ELSE false END)")
-    Page<SistemaPension> findByEstado(@Param("estado") int estado, Pageable pageable);
+    @Query("SELECT s FROM SistemaPension s WHERE " +
+            "(:estado = 2 OR s.activo = CASE WHEN :estado = 1 THEN true ELSE false END) " +
+            "AND (:texto IS NULL OR :texto = '' OR LOWER(s.nombre) LIKE LOWER(CONCAT('%', :texto, '%')))")
+    Page<SistemaPension> findByEstado(@Param("estado") int estado, @Param("texto") String texto, Pageable pageable);
 
     @Transactional
     @Modifying

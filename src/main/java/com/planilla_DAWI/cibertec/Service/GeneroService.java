@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface GeneroService {
-    Page<GeneroDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable);
+    Page<GeneroDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable);
     GeneroDTO insertar(GeneroDTO dto);
     GeneroDTO actualizar(GeneroDTO dto);
     int cambiarEstado(Integer id);

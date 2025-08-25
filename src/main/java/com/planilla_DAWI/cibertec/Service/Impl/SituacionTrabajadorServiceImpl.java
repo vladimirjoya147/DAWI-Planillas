@@ -23,8 +23,8 @@ public class SituacionTrabajadorServiceImpl implements SituacionTrabajadorServic
     private SituacionTrabajadorRepository repository;
 
     @Override
-    public Page<SituacionTrabajadorDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable) {
-        return repository.findByEstado(estado.getValor(), pageable).map(SituacionTrabajadorMapper::toDTO);
+    public Page<SituacionTrabajadorDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable) {
+        return repository.findByEstado(estado.getValor(), texto, pageable).map(SituacionTrabajadorMapper::toDTO);
     }
 
     @Override
