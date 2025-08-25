@@ -49,7 +49,7 @@ public class TipoDocumentoServiceImpl implements TipoDocumentoService {
     @Override
     @Transactional
     public int cambiarEstado(Integer id) {
-        return repository.cambiarEstado(id, new Date());
+        return repository.cambiarEstado(id, LocalDateTime.now());
     }
 
     @Override

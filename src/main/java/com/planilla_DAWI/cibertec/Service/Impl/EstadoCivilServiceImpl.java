@@ -60,7 +60,7 @@ public class EstadoCivilServiceImpl implements EstadoCivilService {
     @Transactional
     @Override
     public void cambiarEstado(Integer id) {
-        repository.cambiarEstado(id,new Date());
+        repository.cambiarEstado(id,LocalDateTime.now());
     }
 
 

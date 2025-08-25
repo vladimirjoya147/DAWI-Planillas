@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface SituacionTrabajadorRepository extends JpaRepository<SituacionTrabajador, Integer> {
@@ -21,5 +22,5 @@ public interface SituacionTrabajadorRepository extends JpaRepository<SituacionTr
     @Transactional
     @Modifying
     @Query("UPDATE SituacionTrabajador s SET s.activo = CASE WHEN s.activo = true THEN false ELSE true END, s.fecUltimaModificacion = :fecha WHERE s.idSituacion = :id")
-    int cambiarEstado(@Param("id") Integer id, @Param("fecha") Date fecha);
+    int cambiarEstado(@Param("id") Integer id, @Param("fecha") LocalDateTime fecha);
 }

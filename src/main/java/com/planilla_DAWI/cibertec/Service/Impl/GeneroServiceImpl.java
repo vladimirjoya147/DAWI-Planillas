@@ -49,7 +49,7 @@ public class GeneroServiceImpl implements GeneroService {
     @Override
     @Transactional
     public int cambiarEstado(Integer id) {
-        return repository.cambiarEstado(id, new Date());
+        return repository.cambiarEstado(id, LocalDateTime.now());
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Repository
@@ -23,5 +24,5 @@ public interface SistemaPensionRepository extends JpaRepository<SistemaPension, 
     @Transactional
     @Modifying
     @Query("UPDATE SistemaPension s SET s.activo = CASE WHEN s.activo = true THEN false ELSE true END, s.fecUltimaModificacion = :fecha WHERE s.idSistemaPension = :id")
-    int cambiarEstado(@Param("id") Integer id, @Param("fecha") Date fecha);
+    int cambiarEstado(@Param("id") Integer id, @Param("fecha") LocalDateTime fecha);
 }
