@@ -52,17 +52,8 @@ public class EstadosCivilesController {
     public ResponseEntity<?> obtenerEstadoCivil(@PathVariable Integer id) {
         try {
             EstadoCivilDTO estadoCivilDTO = estadoCivilService.obtenerPorId(id);
-            Map<String, Object> response = new HashMap<>();
 
-            if (estadoCivilDTO == null) {
-                response.put("success", false);
-                response.put("message", "Estado civil no encontrado");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-
-            response.put("success", true);
-            response.put("data", estadoCivilDTO);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(estadoCivilDTO);
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -76,22 +67,17 @@ public class EstadosCivilesController {
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
             BindingResult result) {
 
-        Map<String, Object> response = new HashMap<>();
 
-        if (result.hasErrors()) {
-            response.put("success", false);
-            response.put("message", "Datos de entrada inválidos");
-            response.put("errors", result.getAllErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
 
         try {
             EstadoCivilDTO nuevoEstadoCivil = estadoCivilService.crear(estadoCivilDTO);
+            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Estado civil creado exitosamente");
             response.put("data", nuevoEstadoCivil);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Error al crear el estado civil: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -103,34 +89,18 @@ public class EstadosCivilesController {
             @PathVariable Integer id,
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
             BindingResult result) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        if (result.hasErrors()) {
-            response.put("success", false);
-            response.put("message", "Datos de entrada inválidos");
-            response.put("errors", result.getAllErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
         try {
             // Verificar si existe el estado civil
-            EstadoCivilDTO estadoCivilExistente = estadoCivilService.obtenerPorId(id);
-            if (estadoCivilExistente == null) {
-                response.put("success", false);
-                response.put("message", "Estado civil no encontrado");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-
+            Map<String, Object> response = new HashMap<>();
             // Asegurar que el ID del path coincida con el del objeto
             estadoCivilDTO.setIdEstadoCivil(id);
-
             EstadoCivilDTO estadoCivilActualizado = estadoCivilService.actualizar(estadoCivilDTO);
             response.put("success", true);
             response.put("message", "Estado civil actualizado exitosamente");
             response.put("data", estadoCivilActualizado);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Error al actualizar el estado civil: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
