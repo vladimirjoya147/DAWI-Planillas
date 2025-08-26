@@ -58,6 +58,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
+                        // Endpoints públicos (sin autenticación)
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/enums/**").permitAll()
                         .requestMatchers(
@@ -69,9 +70,61 @@ public class SecurityConfig {
                                 "/configuration/ui",
                                 "/configuration/security"
                         ).permitAll()
+                        
+                        // Gestión de Cargos
                         .requestMatchers("/api/cargos/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
-                        //.requestMatchers("/api/trabajadores/**").hasRole("ADMIN")
-                        .requestMatchers("/api/cargos/Insert").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/cargos/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/cargos/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/cargos/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/cargos/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        
+                        // Gestión de Asistencias
+                        .requestMatchers("/api/asistencias").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/asistencias/buscar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/asistencias/descargar-excel").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/asistencias/cargar-excel").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/asistencias/guardar").hasAnyRole("ADMINISTRADOR")
+                        
+                        // Gestión de Estados Civiles
+                        .requestMatchers("/api/estados-civiles/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/estados-civiles/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/estados-civiles/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/estados-civiles/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/estados-civiles/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/estados-civiles/**").hasAnyRole("ADMINISTRADOR")
+                        
+                        // Gestión de Géneros
+                        .requestMatchers("/api/generos/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/generos/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/generos/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/generos/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/generos/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/generos/**").hasAnyRole("ADMINISTRADOR")
+
+                        // Gestión de Sistemas de Pensión
+                        .requestMatchers("/api/sistemas-pension/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/**").hasAnyRole("ADMINISTRADOR")
+                        // Gestión de Situaciones de Trabajador
+                        .requestMatchers("/api/situaciones-trabajador/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/situaciones-trabajador/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/situaciones-trabajador/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/situaciones-trabajador/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/situaciones-trabajador/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/situaciones-trabajador/**").hasAnyRole("ADMINISTRADOR")
+
+                        // Gestión de Tipos de Documento
+                        .requestMatchers("/api/tipos-documento/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/tipos-documento/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/tipos-documento/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/tipos-documento/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/tipos-documento/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/tipos-documento/**").hasAnyRole("ADMINISTRADOR")
+                        
+                        // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

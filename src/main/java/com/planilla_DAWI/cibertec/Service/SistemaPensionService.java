@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SistemaPensionService {
-    Page<SistemaPensionDTO> buscarPorEstado(EstadoEnum estado, Pageable pageable);
+    Page<SistemaPensionDTO> buscarPorEstado(EstadoEnum estado, String texto, Pageable pageable);
     SistemaPensionDTO insertar(SistemaPensionDTO dto);
     SistemaPensionDTO actualizar(SistemaPensionDTO dto);
     int cambiarEstado(Integer id);

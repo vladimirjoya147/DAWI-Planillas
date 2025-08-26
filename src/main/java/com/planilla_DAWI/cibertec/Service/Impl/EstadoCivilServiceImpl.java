@@ -26,8 +26,8 @@ public class EstadoCivilServiceImpl implements EstadoCivilService {
     }
 
     @Override
-    public Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado) {
-        return repository.findByEstado(estado.getValor(),page)
+    public Page<EstadoCivilDTO> listarEstadosCiviles(Pageable page, EstadoEnum estado, String texto) {
+        return repository.findByEstado(estado.getValor(), texto, page)
                 .map(EstadoCivilMapper::toDTO);
     }
 
@@ -60,7 +60,7 @@ public class EstadoCivilServiceImpl implements EstadoCivilService {
     @Transactional
     @Override
     public void cambiarEstado(Integer id) {
-        repository.cambiarEstado(id,new Date());
+        repository.cambiarEstado(id,LocalDateTime.now());
     }
 
 

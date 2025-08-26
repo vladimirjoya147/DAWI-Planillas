@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -30,28 +31,15 @@ public class EstadosCivilesController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<Map<String, Object>> listarEstadosCiviles(@RequestParam(defaultValue = "TODOS") EstadoEnum estado,
-                                                                    @RequestParam(defaultValue = "0") int page,
-                                                                    @RequestParam(defaultValue = "10") int size,
-                                                                    @RequestParam(defaultValue = "Id,asc") String[] sort) {
+    public ResponseEntity<?> listarEstadosCiviles(@RequestParam(defaultValue = "TODOS") EstadoEnum estado,
+                                                                    @RequestParam(required = false, defaultValue = "") String texto,
+                                                                    @PageableDefault(size = 10) Pageable pageable) {
 
         try {
             // Crear el objeto Pageable
-            Pageable pageable = PageRequest.of(page, size, Sort.by(sort[1].equals("desc")
-                    ? Sort.Direction.DESC : Sort.Direction.ASC, sort[0]));
 
-            Page<EstadoCivilDTO> estadosCivilesPage = estadoCivilService.listarEstadosCiviles(pageable, estado);
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("content", estadosCivilesPage.getContent());
-            response.put("currentPage", page);
-            response.put("totalPages", estadosCivilesPage.getTotalPages());
-            response.put("pageSize", estadosCivilesPage.getSize());
-            response.put("totalItems", estadosCivilesPage.getTotalElements());
-            response.put("estado", estado);
-            response.put("success", true);
-
-            return ResponseEntity.ok(response);
+            Page<EstadoCivilDTO> estadosCivilesPage = estadoCivilService.listarEstadosCiviles(pageable, estado, texto);
+            return ResponseEntity.ok(estadosCivilesPage);
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -61,20 +49,11 @@ public class EstadosCivilesController {
     }
 
     @GetMapping("/obtenerById/{id}")
-    public ResponseEntity<Map<String, Object>> obtenerEstadoCivil(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerEstadoCivil(@PathVariable Integer id) {
         try {
             EstadoCivilDTO estadoCivilDTO = estadoCivilService.obtenerPorId(id);
-            Map<String, Object> response = new HashMap<>();
 
-            if (estadoCivilDTO == null) {
-                response.put("success", false);
-                response.put("message", "Estado civil no encontrado");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-
-            response.put("success", true);
-            response.put("data", estadoCivilDTO);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(estadoCivilDTO);
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -83,66 +62,45 @@ public class EstadosCivilesController {
         }
     }
 
-    @PostMapping("/Insertar")
-    public ResponseEntity<Map<String, Object>> crearEstadoCivil(
+    @PostMapping("/insertar")
+    public ResponseEntity<?> crearEstadoCivil(
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
             BindingResult result) {
 
-        Map<String, Object> response = new HashMap<>();
 
-        if (result.hasErrors()) {
-            response.put("success", false);
-            response.put("message", "Datos de entrada inválidos");
-            response.put("errors", result.getAllErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
 
         try {
             EstadoCivilDTO nuevoEstadoCivil = estadoCivilService.crear(estadoCivilDTO);
+            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "Estado civil creado exitosamente");
             response.put("data", nuevoEstadoCivil);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Error al crear el estado civil: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
-    @PutMapping("/Update/{id}")
-    public ResponseEntity<Map<String, Object>> actualizarEstadoCivil(
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizarEstadoCivil(
             @PathVariable Integer id,
             @Valid @RequestBody EstadoCivilDTO estadoCivilDTO,
             BindingResult result) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        if (result.hasErrors()) {
-            response.put("success", false);
-            response.put("message", "Datos de entrada inválidos");
-            response.put("errors", result.getAllErrors());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-
         try {
             // Verificar si existe el estado civil
-            EstadoCivilDTO estadoCivilExistente = estadoCivilService.obtenerPorId(id);
-            if (estadoCivilExistente == null) {
-                response.put("success", false);
-                response.put("message", "Estado civil no encontrado");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            }
-
+            Map<String, Object> response = new HashMap<>();
             // Asegurar que el ID del path coincida con el del objeto
             estadoCivilDTO.setIdEstadoCivil(id);
-
             EstadoCivilDTO estadoCivilActualizado = estadoCivilService.actualizar(estadoCivilDTO);
             response.put("success", true);
             response.put("message", "Estado civil actualizado exitosamente");
             response.put("data", estadoCivilActualizado);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Error al actualizar el estado civil: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -150,7 +108,7 @@ public class EstadosCivilesController {
     }
 
     @PatchMapping("/cambiarEstado/{id}")
-    public ResponseEntity<Map<String, Object>> cambiarEstado(@PathVariable Integer id) {
+    public ResponseEntity<?> cambiarEstado(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -174,7 +132,7 @@ public class EstadosCivilesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> eliminarEstadoCivil(@PathVariable Integer id) {
+    public ResponseEntity<?> eliminarEstadoCivil(@PathVariable Integer id) {
         Map<String, Object> response = new HashMap<>();
 
         try {
