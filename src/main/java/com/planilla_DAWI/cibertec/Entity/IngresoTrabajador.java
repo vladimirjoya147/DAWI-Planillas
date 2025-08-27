@@ -26,7 +26,7 @@ public class IngresoTrabajador {
     private BigDecimal bonifCargo;
 
     @Column(nullable = false)
-    private boolean activo = true;
+    private Boolean activo = true;
 
     @Column(nullable = false)
     private LocalDateTime fecCreacion = LocalDateTime.now();
