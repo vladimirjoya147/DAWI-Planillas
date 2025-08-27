@@ -42,10 +42,10 @@ public class Trabajador {
     private Cargo cargo;
 
     @Column(nullable = false)
-    private LocalDateTime fecNacimiento;
+    private LocalDate fecNacimiento;
 
     @Column(nullable = false)
-    private LocalDateTime fecIngreso;
+    private LocalDate fecIngreso;
 
     @ManyToOne
     @JoinColumn(name = "idSituacion", nullable = false)
