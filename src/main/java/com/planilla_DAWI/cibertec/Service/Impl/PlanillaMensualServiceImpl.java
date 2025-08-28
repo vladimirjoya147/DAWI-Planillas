@@ -28,26 +28,37 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
     private final IngresoTrabajadorRepository ingresoTrabajadorRepository;
     private final AsistenciaTrabajadorRepository asistenciaTrabajadorRepository;
     private final SistemaPensionRepository sistemaPensionRepository;
-   /*
+    private final CargoRepository cargoRepository;
+    private final EstadoCivilRepository estadoCivilRepository;
+    private final SituacionTrabajadorRepository situacionTrabajadorRepository;
+    /*
+     @Autowired
+     private ModelMapper modelMapper;
+ */
     @Autowired
-    private ModelMapper modelMapper;
-*/
-   @Autowired
-   private PlanillaMapperManual planillaMapper;
-    public PlanillaMensualServiceImpl(PlanillaRepository planillaRepository, ParametroRepository parametroRepository, TrabajadorRepository trabajadorRepository, IngresoTrabajadorRepository ingresoTrabajadorRepository, AsistenciaTrabajadorRepository asistenciaTrabajadorRepository, SistemaPensionRepository sistemaPensionRepository) {
+    private PlanillaMapperManual planillaMapper;
+
+    public PlanillaMensualServiceImpl(PlanillaRepository planillaRepository, ParametroRepository parametroRepository,
+                                      TrabajadorRepository trabajadorRepository, IngresoTrabajadorRepository ingresoTrabajadorRepository,
+                                      AsistenciaTrabajadorRepository asistenciaTrabajadorRepository, SistemaPensionRepository sistemaPensionRepository,
+                                      CargoRepository cargoRepository, EstadoCivilRepository estadoCivilRepository,
+                                      SituacionTrabajadorRepository situacionTrabajadorRepository) {
         this.planillaRepository = planillaRepository;
         this.parametroRepository = parametroRepository;
         this.trabajadorRepository = trabajadorRepository;
         this.ingresoTrabajadorRepository = ingresoTrabajadorRepository;
         this.asistenciaTrabajadorRepository = asistenciaTrabajadorRepository;
         this.sistemaPensionRepository = sistemaPensionRepository;
+        this.cargoRepository = cargoRepository;
+        this.estadoCivilRepository = estadoCivilRepository;
+        this.situacionTrabajadorRepository = situacionTrabajadorRepository;
     }
 
     @Override
     public List<PlanillaMensualDTO> listarPlanillas(Integer anio, Integer mes) {
-       List<PlanillaMensual> planillaMensual = planillaRepository.findByAnioAndMes(anio, mes);
+        List<PlanillaMensual> planillaMensual = planillaRepository.findByAnioAndMes(anio, mes);
         return planillaMapper.planillaListToDTO(planillaMensual);
-       //return PlanillaMapper.INSTANCE  .PlanillaListToDTO(planillaMensual);
+        //return PlanillaMapper.INSTANCE  .PlanillaListToDTO(planillaMensual);
        /* return planillaMensual.stream()
                 .map(planilla -> modelMapper.map(planilla, PlanillaMensualDTO.class))
                 .collect(Collectors.toList());
@@ -57,7 +68,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
 
     @Override
     public PlanillaPorDocumentoDTO ObtenerPlanillaPorDocumento(String documento, Integer anio, Integer mes) {
-        PlanillaMensual planillaMensual = planillaRepository.findPlanillaActivaPorDocumento(anio, mes , documento);
+        PlanillaMensual planillaMensual = planillaRepository.findPlanillaActivaPorDocumento(anio, mes, documento);
         return planillaMapper.documentoToDTO(planillaMensual);
         //return PlanillaMapper.INSTANCE.DocumentoToDTO(planillaMensual);
         /*return modelMapper.map(planillaMensual, PlanillaPorDocumentoDTO.class);
@@ -99,13 +110,13 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
             pla.setAnio(anio);
             pla.setMes(mes);
             pla.setTrabajador(t);
-           // pla.setSituacion (new SituacionTrabajador().setIdSituacion(  t.getIdSituacion()));
-          //  pla.setCargo(t.getCargo());
+            pla.setSituacion(situacionTrabajadorRepository.findById(t.getIdSituacion()).orElse(new SituacionTrabajador()));
+            pla.setCargo(cargoRepository.findById(t.getIdCargo()).orElse(new Cargo()));
             pla.setApellido(t.getApellidoPaterno() + " " + t.getApellidoMaterno());
             pla.setNombre(t.getNombres());
-          //  pla.setSistemaPension(t.getSistemaPension());
-          //  pla.setEstadoCivil(t.getEstadoCivil());
-          //  pla.setHijos((short) t.getHijos());
+            pla.setSistemaPension(sistemaPensionRepository.findById(t.getIdSistemaPension()).orElse(new SistemaPension()));
+            pla.setEstadoCivil(estadoCivilRepository.findById(t.getIdEstadoCivil()).orElse(new EstadoCivil()));
+            pla.setHijos(t.getHijos().shortValue());
             pla.setFechaIngreso(t.getFecIngreso());
 
             pla.setSueldoBasico(itemIngreso != null ? itemIngreso.getRemuneracion() : BigDecimal.ZERO);
@@ -120,13 +131,13 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
                     ? BigDecimal.valueOf(itemAsistencia.getDiasLaborales() * 8)
                     : BigDecimal.ZERO);
 
-            pla.setNHorasExtra1(itemAsistencia != null ? itemAsistencia.getHorasExtra25() : BigDecimal.ZERO);
+            pla.setNHorasExtra1(itemAsistencia.getHorasExtra25());
             pla.setNHorasExtra2(itemAsistencia != null ? itemAsistencia.getHorasExtra35() : BigDecimal.ZERO);
-           // pla.setNDiasTrab((short) (itemAsistencia != null ? itemAsistencia.getDiasLaborales() : 0));
-           // pla.setNDiasDescansos((short) (itemAsistencia != null ? itemAsistencia.getDiasDescanso() : 0));
-           // pla.setNFeriadosTrab((short) (itemAsistencia != null ? itemAsistencia.getDiasFeriados() : 0));
-           // pla.setNDescansosTrab((short) 0);
-           // pla.setNDiasInasistencias((short) (itemAsistencia != null ? itemAsistencia.getDiasInasistencia() : 0));
+            pla.setNDiasTrab((short) (itemAsistencia != null ? itemAsistencia.getDiasLaborales() : 0));
+            pla.setNDiasDescansos((short) (itemAsistencia != null ? itemAsistencia.getDiasDescanso() : 0));
+            pla.setNFeriadosTrab((short) (itemAsistencia != null ? itemAsistencia.getDiasFeriados() : 0));
+            pla.setNDescansosTrab((short) 0);
+            pla.setNDiasInasistencias((short) (itemAsistencia != null ? itemAsistencia.getDiasInasistencia() : 0));
 
             BigDecimal sueldoBasico = itemIngreso != null ? itemIngreso.getRemuneracion() : BigDecimal.ZERO;
             BigDecimal vale = itemIngreso != null ? itemIngreso.getVale() : BigDecimal.ZERO;
@@ -167,28 +178,23 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
 
             pla.setTotalIngreso(pla.getHaberBasico().add(pla.getValesEmpleado()).add(pla.getVHorasExtra2()).add(pla.getVHorasExtra1())
                     .add(pla.getVAsigFamiliar()).add(pla.getVFeriadoTrab()));
-/*
-            SistemaPension sp = sistemaPensiones.stream()
-                    .filter(s -> s.getIdSistemaPension().equals(t.getSistemaPension().getIdSistemaPension()))
-                    .findFirst()
-                    .orElse(null);
 
-            if (sp != null) {
-                pla.setPorcAporte(sp.getAporte());
-                pla.setAporte(pla.getTotalIngreso().multiply(sp.getAporte().divide(BigDecimal.valueOf(100))));
+            SistemaPension sp = sistemaPensionRepository.findById(t.getIdSistemaPension()).orElse(new SistemaPension());
 
-                pla.setPorcComision(sp.getComision());
-                pla.setComision(pla.getTotalIngreso().multiply(sp.getComision().divide(BigDecimal.valueOf(100))));
+            pla.setPorcAporte(sp.getAporte());
+            pla.setAporte(pla.getTotalIngreso().multiply(sp.getAporte().divide(BigDecimal.valueOf(100))));
 
-                pla.setPorcPrima(sp.getPrima());
-                pla.setPrima(pla.getTotalIngreso().multiply(sp.getPrima().divide(BigDecimal.valueOf(100))));
-            }
-*/
+            pla.setPorcComision(sp.getComision());
+            pla.setComision(pla.getTotalIngreso().multiply(sp.getComision().divide(BigDecimal.valueOf(100))));
+
+            pla.setPorcPrima(sp.getPrima());
+            pla.setPrima(pla.getTotalIngreso().multiply(sp.getPrima().divide(BigDecimal.valueOf(100))));
+
             planillas.add(pla);
         }
 
         return planillaMapper.entityListToResponse(planillas);
-      // return PlanillaMapper.INSTANCE.toDtoList(planillas);
+        // return PlanillaMapper.INSTANCE.toDtoList(planillas);
        /* return planillas.stream()
                 .map(planilla -> modelMapper.map(planilla, PlanillaMensualResponse.class))
                 .collect(Collectors.toList());
@@ -201,7 +207,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
         if (planResponse == null || planResponse.isEmpty()) {
             return false;
         }
-        int rows=planillaRepository.eliminarPlanillas(planResponse.get(0).getAnio(),planResponse.get(0).getMes());
+        int rows = planillaRepository.eliminarPlanillas(planResponse.get(0).getAnio(), planResponse.get(0).getMes());
         System.out.println("Registros eliminados: " + rows);
         List<PlanillaMensual> entidades = planillaMapper.responseListToEntity(planResponse);
 

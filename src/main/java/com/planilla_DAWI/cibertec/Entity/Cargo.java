@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "Cargos")
@@ -41,5 +40,6 @@ public class Cargo {
     protected void onUpdate() {
         fecUltimaModificacion = LocalDateTime.now();
     }
+    public Cargo(){}
 }
 
