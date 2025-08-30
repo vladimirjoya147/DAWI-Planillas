@@ -50,7 +50,7 @@ public class PlanillaMensual {
     private EstadoCivil estadoCivil;
 
     private Short hijos;
-    private LocalDate fechaIngreso;
+    private LocalDateTime fechaIngreso;
     private BigDecimal sueldoBasico;
     private BigDecimal porcHoraExtra1;
     private BigDecimal porcHoraExtra2;

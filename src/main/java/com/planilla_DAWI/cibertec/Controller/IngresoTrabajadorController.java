@@ -19,7 +19,7 @@ public class IngresoTrabajadorController {
         return ingresoTrabajadorService.insertar(Obj);
     }
 
-    @PostMapping("/Insertar")
+    @PostMapping("/buscar/{id}")
     public IngresoTrabajador BuscarPorTrabajador(Integer id) {
         return ingresoTrabajadorService.BuscarPorTrabajador(id);
     }

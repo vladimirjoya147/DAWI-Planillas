@@ -21,7 +21,7 @@ public class IngresoTrabajadorServiceImpl implements IngresoTrabajadorService {
 
     @Override
     public IngresoTrabajador BuscarPorTrabajador(Integer id) {
-        return ingresoTrabajadorRepository.BuscarPorTrabajador(id);
+        return ingresoTrabajadorRepository.IngresoPorTrabajador(id);
     }
 
     @Override

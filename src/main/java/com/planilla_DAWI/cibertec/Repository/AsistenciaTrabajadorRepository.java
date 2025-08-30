@@ -30,14 +30,6 @@ public interface AsistenciaTrabajadorRepository extends JpaRepository<Asistencia
             "AND a.mes = :mes")
     List<AsistenciaTrabajador> findByPeriodoEntidad(@Param("año") Integer año, @Param("mes") Integer mes);
 
-    @Query("SELECT a " +
-            "FROM AsistenciaTrabajador a " +
-            "JOIN a.trabajador t " +
-            "WHERE t.activo = true " +
-            "AND a.año = :año " +
-            "AND a.mes = :mes")
-    List<AsistenciaTrabajador> findByPeriodoEntidad(@Param("año") Integer año, @Param("mes") Integer mes);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM AsistenciaTrabajador a WHERE a.año = :año AND a.mes = :mes")
