@@ -1,15 +1,16 @@
+
 package com.planilla_DAWI.cibertec.Service;
 
 import com.planilla_DAWI.cibertec.Dto.TrabajadorDTO;
-import com.planilla_DAWI.cibertec.Entity.IngresoTrabajador;
-import com.planilla_DAWI.cibertec.Entity.Trabajador;
-
-import java.util.List;
+import com.planilla_DAWI.cibertec.Utils.Enums.EstadoEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TrabajadorService {
-    List<Trabajador> listarTrabajadoresActivos ();
-    List<TrabajadorDTO>listarTrabajadorBusqueda(String busqueda, int  estado);
-    TrabajadorDTO trabajadorPorId(Integer id);
-    Integer insertar(Trabajador Trabajador);
-    Integer cambiarEstado(Integer id);
+    TrabajadorDTO insert(TrabajadorDTO request);
+    TrabajadorDTO update(Integer id, TrabajadorDTO request);
+    int cambiarEstado(Integer id);
+    Page<TrabajadorDTO> busqueda(EstadoEnum estado, String texto, Pageable pageable);
+    TrabajadorDTO getById(Integer id);
 }
+

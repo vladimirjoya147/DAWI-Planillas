@@ -122,8 +122,19 @@ public class SecurityConfig {
                         .requestMatchers("/api/tipos-documento/insertar").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/actualizar/**").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
-                        .requestMatchers("/api/tipos-documento/**").hasAnyRole("ADMINISTRADOR")
-                        
+
+                        // Gestión de Trabajador
+                        .requestMatchers("/api/trabajador/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/trabajador/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/trabajador/insertar").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/trabajador/actualizar/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/trabajador/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/trabajador/**").hasAnyRole("ADMINISTRADOR")
+                        // Gestión de Planilla-Mensual
+                        .requestMatchers("/api/planilla-mensual/listarPlanilla").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/planilla-mensual/buscarBoleta").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/planilla-mensual/calcularPlanilla").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/planilla-mensual/guardarPlanilla").hasAnyRole("ADMINISTRADOR")
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )

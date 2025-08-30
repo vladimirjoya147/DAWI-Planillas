@@ -1,16 +1,14 @@
 package com.planilla_DAWI.cibertec.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@Entity
 @Table(name = "estadosciviles")
 public class EstadoCivil {
 
@@ -42,4 +40,5 @@ public class EstadoCivil {
     protected void onUpdate() {
         fecUltimaModificacion = LocalDateTime.now();
     }
+    public EstadoCivil(){}
 }

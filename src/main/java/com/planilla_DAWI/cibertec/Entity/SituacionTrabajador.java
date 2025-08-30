@@ -1,11 +1,16 @@
 package com.planilla_DAWI.cibertec.Entity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
-@Data
 @Table(name = "SituacionTrabajador")
 public class SituacionTrabajador {
 
@@ -23,4 +28,5 @@ public class SituacionTrabajador {
     private LocalDateTime fecCreacion = LocalDateTime.now();
 
     private LocalDateTime fecUltimaModificacion;
+    public  SituacionTrabajador(){}
 }

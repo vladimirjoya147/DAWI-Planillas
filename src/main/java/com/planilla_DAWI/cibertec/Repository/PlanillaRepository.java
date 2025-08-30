@@ -1,6 +1,5 @@
 package com.planilla_DAWI.cibertec.Repository;
 
-import com.planilla_DAWI.cibertec.Dto.PlanillaMensualDTO;
 import com.planilla_DAWI.cibertec.Entity.PlanillaMensual;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

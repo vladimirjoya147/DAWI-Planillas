@@ -44,6 +44,16 @@ public class Usuario implements UserDetails {
     }
 
     @Override
+    public String getUsername() {   // 👈 obligatorio
+        return this.username;
+    }
+
+    @Override
+    public String getPassword() {   // 👈 obligatorio
+        return this.password;
+    }
+
+    @Override
     public boolean isAccountNonExpired() { return true; }
 
     @Override
@@ -51,4 +61,9 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() {    // 👈 obligatorio
+        return this.enabled;
+    }
 }

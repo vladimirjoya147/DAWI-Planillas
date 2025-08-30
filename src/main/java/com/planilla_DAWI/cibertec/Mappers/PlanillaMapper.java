@@ -4,15 +4,22 @@ import com.planilla_DAWI.cibertec.Dto.PlanillaMensualDTO;
 import com.planilla_DAWI.cibertec.Dto.PlanillaMensualResponse;
 import com.planilla_DAWI.cibertec.Dto.PlanillaPorDocumentoDTO;
 import com.planilla_DAWI.cibertec.Entity.PlanillaMensual;
-import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig;
+/*
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
+*/
 import java.util.List;
-
+/*
 @Mapper
+
+ */
+
+
 public interface PlanillaMapper {
+/*
     PlanillaMapper INSTANCE = Mappers.getMapper(PlanillaMapper.class);
+
+ */
 
     PlanillaMensualDTO PlanillatoDTO(PlanillaMensual planillaMensual);
 
@@ -26,4 +33,5 @@ public interface PlanillaMapper {
     List<PlanillaMensual> toEntityList(List<PlanillaMensualResponse> dtos);
 
     List<PlanillaMensualResponse> toDtoList(List<PlanillaMensual> entities);
+
 }

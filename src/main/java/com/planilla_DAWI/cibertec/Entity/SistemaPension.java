@@ -1,12 +1,17 @@
 package com.planilla_DAWI.cibertec.Entity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
-@Data
 @Table(name = "SistemaPensiones")
 public class SistemaPension {
 
@@ -42,4 +47,5 @@ public class SistemaPension {
     protected void onUpdate() {
         fecUltimaModificacion = LocalDateTime.now();
     }
+    public  SistemaPension(){}
 }

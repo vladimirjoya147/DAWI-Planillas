@@ -3,7 +3,7 @@ package com.planilla_DAWI.cibertec.Service;
 import com.planilla_DAWI.cibertec.Dto.PlanillaMensualDTO;
 import com.planilla_DAWI.cibertec.Dto.PlanillaMensualResponse;
 import com.planilla_DAWI.cibertec.Dto.PlanillaPorDocumentoDTO;
-import com.planilla_DAWI.cibertec.Entity.PlanillaMensual;
+
 
 import java.util.List;
 

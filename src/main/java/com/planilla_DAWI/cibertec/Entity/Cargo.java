@@ -5,10 +5,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@Entity
 @Table(name = "Cargos")
 public class Cargo {
 
@@ -40,5 +40,6 @@ public class Cargo {
     protected void onUpdate() {
         fecUltimaModificacion = LocalDateTime.now();
     }
+    public Cargo(){}
 }
 

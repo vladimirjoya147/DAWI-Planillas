@@ -1,68 +1,92 @@
 package com.planilla_DAWI.cibertec.Entity;
-import jakarta.persistence.*;
-import lombok.Data;
 
-import java.time.LocalDate;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "Trabajadores")
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "trabajadores")
+
 public class Trabajador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IdTrabajador")
     private Integer idTrabajador;
-    @ManyToOne
-    @JoinColumn(name = "idTipoDocumento", nullable = false)
-    private TipoDocumento tipoDocumento;
-    @Column(nullable = false, length = 11)
+
+    @Column(name = "IdTipoDocumento", nullable = false)
+    private Integer idTipoDocumento;
+
+    @Column(name = "Documento", nullable = false, length = 11)
     private String documento;
-    @Column(nullable = false, length = 50)
+
+    @Column(name = "Nombres", nullable = false, length = 50)
     private String nombres;
-    @Column(nullable = false, length = 50)
+
+    @Column(name = "ApellidoPaterno", nullable = false, length = 50)
     private String apellidoPaterno;
-    @Column(nullable = false, length = 50)
+
+    @Column(name = "ApellidoMaterno", nullable = false, length = 50)
     private String apellidoMaterno;
-    @ManyToOne
-    @JoinColumn(name = "idGenero", nullable = false)
-    private Genero genero;
-    @ManyToOne
-    @JoinColumn(name = "idEstadoCivil", nullable = false)
-    private EstadoCivil estadoCivil;
-    @Column(nullable = false, length = 120)
+
+    @Column(name = "IdGenero", nullable = false)
+    private Integer idGenero;
+
+    @Column(name = "IdEstadoCivil", nullable = false)
+    private Integer idEstadoCivil;
+
+    @Column(name = "Direccion", nullable = false, length = 120)
     private String direccion;
-    @Column(length = 120)
+
+    @Column(name = "Email", length = 120)
     private String email;
-    @Column(nullable = false)
-    private int hijos = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "idCargo", nullable = false)
-    private Cargo cargo;
+    @Column(name = "Hijos", nullable = false)
+    private Integer hijos ;
 
-    @Column(nullable = false)
-    private LocalDate fecNacimiento;
+    @Column(name = "IdCargo", nullable = false)
+    private Integer idCargo;
 
-    @Column(nullable = false)
-    private LocalDate fecIngreso;
+    @Column(name = "FecNacimiento", nullable = false)
+    private LocalDateTime fecNacimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "idSituacion", nullable = false)
-    private SituacionTrabajador situacion;
+    @Column(name = "FecIngreso", nullable = false)
+    private LocalDateTime fecIngreso;
 
-    @ManyToOne
-    @JoinColumn(name = "idSistemaPension", nullable = false)
-    private SistemaPension sistemaPension;
+    @Column(name = "IdSituacion", nullable = false)
+    private Integer idSituacion;
+
+    @Column(name = "IdSistemaPension", nullable = false)
+    private Integer idSistemaPension;
 
     @Lob
+    @Column(name = "Foto")
     private byte[] foto;
 
-    @Column(nullable = false)
-    private boolean activo = true;
+    @Column(name = "Activo", nullable = false)
+    private Boolean activo = true;
 
-    @Column(nullable = false)
-    private LocalDateTime fecCreacion = LocalDateTime.now();
+    @Column(name = "FecCreacion", nullable = false, updatable = false)
+    private LocalDateTime fecCreacion;
 
+    @Column(name = "FecUltimaModificacion")
     private LocalDateTime fecUltimaModificacion;
+
+    @PrePersist
+    protected void onCreate() {
+        if (fecCreacion == null) {
+            fecCreacion = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fecUltimaModificacion = LocalDateTime.now();
+    }
 }

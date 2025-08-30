@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Mappers;
 
 import com.planilla_DAWI.cibertec.Dto.IngresoTrabajadorDTO;
@@ -18,7 +19,8 @@ public class IngresoTrabajadorMapper {
         dto.setRemuneracion(entity.getRemuneracion());
         dto.setVale(entity.getRemuneracion());
         dto.setBonifCargo(entity.getBonifCargo());
-        dto.setActivo(entity.isActivo());
+        dto.setActivo(entity.getActivo());
         return dto;
     }
 }
+
