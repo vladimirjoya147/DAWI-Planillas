@@ -1,6 +1,9 @@
 package com.planilla_DAWI.cibertec.Dto;
 
 import com.planilla_DAWI.cibertec.Entity.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

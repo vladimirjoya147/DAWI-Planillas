@@ -107,19 +107,22 @@ public class SecurityConfig {
                         .requestMatchers("/api/sistemas-pension/insertar").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/sistemas-pension/actualizar/**").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/sistemas-pension/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+                        .requestMatchers("/api/sistemas-pension/**").hasAnyRole("ADMINISTRADOR")
                         // Gestión de Situaciones de Trabajador
                         .requestMatchers("/api/situaciones-trabajador/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/situaciones-trabajador/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/situaciones-trabajador/insertar").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/situaciones-trabajador/actualizar/**").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/situaciones-trabajador/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
-                        
+                        .requestMatchers("/api/situaciones-trabajador/**").hasAnyRole("ADMINISTRADOR")
+
                         // Gestión de Tipos de Documento
                         .requestMatchers("/api/tipos-documento/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/insertar").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/actualizar/**").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/tipos-documento/cambiarEstado/**").hasAnyRole("ADMINISTRADOR")
+
                         // Gestión de Trabajador
                         .requestMatchers("/api/trabajador/listar").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/trabajador/obtenerById/**").hasAnyRole("USUARIO", "ADMINISTRADOR")
@@ -132,7 +135,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/planilla-mensual/buscarBoleta").hasAnyRole("USUARIO", "ADMINISTRADOR")
                         .requestMatchers("/api/planilla-mensual/calcularPlanilla").hasAnyRole("ADMINISTRADOR")
                         .requestMatchers("/api/planilla-mensual/guardarPlanilla").hasAnyRole("ADMINISTRADOR")
-
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )

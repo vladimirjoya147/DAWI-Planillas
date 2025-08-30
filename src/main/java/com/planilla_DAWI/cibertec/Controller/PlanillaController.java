@@ -22,6 +22,7 @@ public class PlanillaController {
         this.planillaMensualService = planillaMensualService;
     }
 
+
     @GetMapping("/listarPlanilla")
     public ResponseEntity<?> listarPlanillaMensual(@RequestParam(value = "anio") Integer anio,
                                                    @RequestParam(value = "mes") Integer mes) {

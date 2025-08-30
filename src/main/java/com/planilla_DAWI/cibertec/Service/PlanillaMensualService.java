@@ -4,6 +4,7 @@ import com.planilla_DAWI.cibertec.Dto.PlanillaMensualDTO;
 import com.planilla_DAWI.cibertec.Dto.PlanillaMensualResponse;
 import com.planilla_DAWI.cibertec.Dto.PlanillaPorDocumentoDTO;
 
+
 import java.util.List;
 
 public interface PlanillaMensualService {

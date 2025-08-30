@@ -1,11 +1,17 @@
 package com.planilla_DAWI.cibertec.Dto;
 import com.planilla_DAWI.cibertec.Entity.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @RequiredArgsConstructor

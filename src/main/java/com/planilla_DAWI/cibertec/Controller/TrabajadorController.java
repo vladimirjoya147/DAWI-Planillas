@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Controller;
 
 import com.planilla_DAWI.cibertec.Dto.TrabajadorDTO;
@@ -105,3 +106,4 @@ public class TrabajadorController {
         }
     }
 }
+

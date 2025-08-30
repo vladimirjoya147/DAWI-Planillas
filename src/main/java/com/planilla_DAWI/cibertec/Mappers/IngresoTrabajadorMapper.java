@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Mappers;
 
 import com.planilla_DAWI.cibertec.Dto.IngresoTrabajadorDTO;
@@ -22,3 +23,4 @@ public class IngresoTrabajadorMapper {
         return dto;
     }
 }
+

@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Dto;
 
 import lombok.Data;
@@ -28,4 +29,5 @@ public class TrabajadorDTO {
     private Date fecUltimaModificacion;
 
 }
+
 

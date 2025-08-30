@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Service;
 
 import com.planilla_DAWI.cibertec.Dto.TrabajadorDTO;
@@ -12,3 +13,4 @@ public interface TrabajadorService {
     Page<TrabajadorDTO> busqueda(EstadoEnum estado, String texto, Pageable pageable);
     TrabajadorDTO getById(Integer id);
 }
+

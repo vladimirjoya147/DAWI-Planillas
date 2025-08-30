@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Repository;
 
 import com.planilla_DAWI.cibertec.Entity.Trabajador;
@@ -41,6 +42,5 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Integer>
             SELECT * FROM Trabajadores WHERE Activo = true
             """,nativeQuery = true)
     public List<Trabajador> listarTrabajadoresActivos ();
-
 
 }

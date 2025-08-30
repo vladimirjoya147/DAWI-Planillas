@@ -10,6 +10,7 @@ import com.planilla_DAWI.cibertec.Repository.*;
 import com.planilla_DAWI.cibertec.Service.PlanillaMensualService;
 //import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
     private final IngresoTrabajadorRepository ingresoTrabajadorRepository;
     private final AsistenciaTrabajadorRepository asistenciaTrabajadorRepository;
     private final SistemaPensionRepository sistemaPensionRepository;
+
     private final CargoRepository cargoRepository;
     private final EstadoCivilRepository estadoCivilRepository;
     private final SituacionTrabajadorRepository situacionTrabajadorRepository;
@@ -43,6 +45,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
                                       AsistenciaTrabajadorRepository asistenciaTrabajadorRepository, SistemaPensionRepository sistemaPensionRepository,
                                       CargoRepository cargoRepository, EstadoCivilRepository estadoCivilRepository,
                                       SituacionTrabajadorRepository situacionTrabajadorRepository) {
+      
         this.planillaRepository = planillaRepository;
         this.parametroRepository = parametroRepository;
         this.trabajadorRepository = trabajadorRepository;
@@ -52,6 +55,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
         this.cargoRepository = cargoRepository;
         this.estadoCivilRepository = estadoCivilRepository;
         this.situacionTrabajadorRepository = situacionTrabajadorRepository;
+
     }
 
     @Override
@@ -64,10 +68,12 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
                 .collect(Collectors.toList());
 
         */
+
     }
 
     @Override
     public PlanillaPorDocumentoDTO ObtenerPlanillaPorDocumento(String documento, Integer anio, Integer mes) {
+
         PlanillaMensual planillaMensual = planillaRepository.findPlanillaActivaPorDocumento(anio, mes, documento);
         return planillaMapper.documentoToDTO(planillaMensual);
         //return PlanillaMapper.INSTANCE.DocumentoToDTO(planillaMensual);
@@ -117,6 +123,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
             pla.setSistemaPension(sistemaPensionRepository.findById(t.getIdSistemaPension()).orElse(new SistemaPension()));
             pla.setEstadoCivil(estadoCivilRepository.findById(t.getIdEstadoCivil()).orElse(new EstadoCivil()));
             pla.setHijos(t.getHijos().shortValue());
+
             pla.setFechaIngreso(t.getFecIngreso());
 
             pla.setSueldoBasico(itemIngreso != null ? itemIngreso.getRemuneracion() : BigDecimal.ZERO);
@@ -130,6 +137,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
             pla.setNHorasNormal(itemAsistencia != null
                     ? BigDecimal.valueOf(itemAsistencia.getDiasLaborales() * 8)
                     : BigDecimal.ZERO);
+
 
             pla.setNHorasExtra1(itemAsistencia.getHorasExtra25());
             pla.setNHorasExtra2(itemAsistencia != null ? itemAsistencia.getHorasExtra35() : BigDecimal.ZERO);
@@ -179,6 +187,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
             pla.setTotalIngreso(pla.getHaberBasico().add(pla.getValesEmpleado()).add(pla.getVHorasExtra2()).add(pla.getVHorasExtra1())
                     .add(pla.getVAsigFamiliar()).add(pla.getVFeriadoTrab()));
 
+
             SistemaPension sp = sistemaPensionRepository.findById(t.getIdSistemaPension()).orElse(new SistemaPension());
 
             pla.setPorcAporte(sp.getAporte());
@@ -189,9 +198,9 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
 
             pla.setPorcPrima(sp.getPrima());
             pla.setPrima(pla.getTotalIngreso().multiply(sp.getPrima().divide(BigDecimal.valueOf(100))));
-
             planillas.add(pla);
         }
+
 
         return planillaMapper.entityListToResponse(planillas);
         // return PlanillaMapper.INSTANCE.toDtoList(planillas);
@@ -200,6 +209,7 @@ public class PlanillaMensualServiceImpl implements PlanillaMensualService {
                 .collect(Collectors.toList());
 
         */
+
     }
 
     @Override

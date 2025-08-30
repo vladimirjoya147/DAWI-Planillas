@@ -1,3 +1,4 @@
+
 package com.planilla_DAWI.cibertec.Repository;
 
 import com.planilla_DAWI.cibertec.Entity.IngresoTrabajador;
@@ -15,4 +16,9 @@ public interface IngresoTrabajadorRepository extends JpaRepository<IngresoTrabaj
 
     @Query(value = "SELECT * FROM IngresosTrabajadores WHERE Activo = true",nativeQuery = true)
     public List<IngresoTrabajador> ListarIngresosActivos();
+  
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE IngresosTrabajadores it SET it.activo = CASE WHEN it.activo = true THEN false ELSE true END, it.fecUltimaModificacion = :fecha WHERE it.idIngresoTrabajador = :id",nativeQuery = true)
+    int cambiarEstado(@Param("id") Integer id, @Param("fecha") Date fecha);
 }

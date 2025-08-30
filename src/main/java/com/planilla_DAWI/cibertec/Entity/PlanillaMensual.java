@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
 @Data
@@ -49,7 +50,7 @@ public class PlanillaMensual {
     private EstadoCivil estadoCivil;
 
     private Short hijos;
-    private LocalDateTime fechaIngreso;
+    private LocalDate fechaIngreso;
     private BigDecimal sueldoBasico;
     private BigDecimal porcHoraExtra1;
     private BigDecimal porcHoraExtra2;

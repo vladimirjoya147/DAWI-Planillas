@@ -1,6 +1,9 @@
 package com.planilla_DAWI.cibertec.Dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 
 import java.math.BigDecimal;
 @Data

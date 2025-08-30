@@ -34,5 +34,4 @@ public interface PlanillaMapper {
 
     List<PlanillaMensualResponse> toDtoList(List<PlanillaMensual> entities);
 
-
 }
